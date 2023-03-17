@@ -1,0 +1,95 @@
+.secmain {
+  padding: 20px;
+}
+
+@font-face {
+  font-family: sans-serif;
+src: url(https://github.com/googlefonts/ms-madi/blob/master/fonts/otf/MsMadi-Regular.otf);
+}
+
+h1 {
+  float: left;
+}
+nav {
+  float: right;
+  align-content: center;
+}
+
+.banner {
+  background-image: url("hero.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: auto;
+  padding: 25px;
+  clear: both;
+}
+
+.banner h3{
+  align-content: center;
+  text-align: center;
+  color:aliceblue;
+}
+
+#form {
+  display: flex;
+  justify-content: center;
+}
+
+header {
+  background-color: #F5D4AC;
+}
+header.sticky-header {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  font-size: 20px;
+
+}
+.nav-list {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-left: : 10px;
+  margin-top: 10px;
+
+}
+
+.nav-item {
+flex-basis: calc(25% -20px);
+margin-right: 10px;
+margin-bottom: 10px;
+
+}
+.navbar-brand {
+  color: inherit;
+  border-color: inherit;
+  border-radius: 100%;
+  width: 3%;
+}
+
+@media (max-width: 600px) {
+  #navicon {
+    color: inherit;
+    border-color: inherit;
+    border-radius: 100%;
+    width: 15%;
+  }
+}
+.name-section {
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-content: flex-start;
+column-width: 50%;
+}
+
+.nav-section {
+  column-width: 50%;
+
+}
+
+.navbar navbar-expand-lg bg-light {
+position: sticky;
+
+}

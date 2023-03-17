@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="styles/style.css">
+
+  <title>Forget.me.not</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg bg-light">
+    <div class="container-fluid">
+      <img class="navbar-brand" id="navicon" href="#home" src="images/profile-image.jpg" <="" img="" width="3%">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#top">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#dashboard">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#schedule">Plants</a>
+          </li>
+        </ul>
+
+        <div class="social-icons">
+          <a href="https://www.instagram.com/iambenjaminwild/" <i="" class="bi bi-instagram"> </a>
+          <a href="https://www.facebook.com/iambenjaminwild/" <i="" class="bi bi-facebook"></a>
+          <a href="https://twitter.com/iambenjaminwild" <i="" class="bi bi-twitter"></a>
+          <a href="https://dribbble.com/iambenjaminwild" <i="" class="bi bi-dribbble"></a>
+          <a href="https://github.com/itsemtuk/" <i="" class="bi bi-github"></a>
+          <a href="https://www.behance.net/iambenjaminwild" <i="" class="bi bi-behance"></a>
+        </div>
+
+      </div>
+    </div>
+  </nav>
+  <header>
+    <h1> Forget Me Not </h1>
+
+
+    <!-- hero banner with text of short explanation of the sites point-->
+    <div class="banner">
+      <h3> Your reminders to help you remember when to water your plants! </h3>
+      <!-- Search bar -->
+      <form id="form" role="search">
+        <input type="search" id="query" name="q" placeholder="Search..."
+          aria-label="Search for your plants to add to your schedule for watering and temperatures.">
+        <button id="searchbutton"> Search </button>
+      </form>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <!-- Weather api link-->
+      <div id="weather">
+        <div id="description"></div>
+        <h1 id="temp"></h1>
+        <div id="location"></div>
+      </div>
+
+
+
+      <div id="dashboard">
+        <h2> My Dashboard </h2>
+        <!-- This section is for the plant cards???-->
+        <!-- will need to use javascript to insert cards here -->
+
+
+      </div>
+      <section id="schedule" class="secmain">
+
+
+
+
+        <!-- example cards for styling purposes - will be deleted at end -->
+        <div class="card-deck">
+          <div class="card">
+            <img src="..." class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 id="card-title">Card title</h5>
+              <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional
+                content. This content is a little bit longer.</p>
+              <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+              <p id="locard"></p>
+            </div>
+          </div>
+        </div>
+        </div>
+        <!-- end of area to be deleted -->
+
+
+
+
+
+      </section>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+
+
+</html>
