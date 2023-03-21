@@ -8,7 +8,7 @@ var outputArray = {};
 var myPlants = ["Fern", "Palm", "grass", "flower"];
 
 //HTML ELEMENTS FOR JQUERY
-var viewing = $("viewing-pane");
+var viewing = $("#viewing-pane");
 
 
 const settings = {
@@ -37,16 +37,16 @@ $.ajax(settings).then(function (response) {
 		}
 	}
 
-	dashboard(output, outputArray);
+	dashboard(outputArray);
 });
 
 
 
 
-function dashboard(data, dataArray) {
+function dashboard(dataArray) {
 	viewing.empty();
 
-	var dashboard = $("div");
+	var dashboard = $("<div>");
 	var title = $("<h2>").text("My Plants:");
 	dashboard.append(title);
 
@@ -83,9 +83,9 @@ function dashboard(data, dataArray) {
 			"align-items": "center",
 			"justify-content": "center",
 			"min-height": "30vh",
-			"background-color": "#eb786f",
+			"background-color": "#333",
 			"border-radius": "3rem",
-			"color": "black",
+			"color": "violet",
 			"margin": "0.5rem",
 			"padding": "0.75rem",
 			"box-shadow": "10px 10px 20px rgba(0, 0, 0, 0.7)"
@@ -93,18 +93,12 @@ function dashboard(data, dataArray) {
 
 		cardSection.css({
 			"display": "flex",
-			"background-color": "yellow",
+			"background-color": "purple",
 			"margin": "1rem",
 			"padding": "1rem",
 			"flex-direction": "horizontal",
 
 		})
-
-		// viewing.css({
-		// 	"min-height": "100vh",
-		// 	"color": "yellow",
-		// 	"background-image": "url(./styles/water-me-seymore.jpg)"
-		// });
 
 
 	}
@@ -112,66 +106,12 @@ function dashboard(data, dataArray) {
 }
 
 
-// // search bar
-// var userInput = document.querySelector("#query")
-// var button = document.querySelector("#searchbutton")
-// button.addEventListener("click", getPlantData)
+// search bar
+var userInput = document.querySelector("#query") ;
+var button = document.querySelector("#searchbutton");
+button.addEventListener("click", getPlantData);
 
-// const string = JSON.stringify(options);
-
-
-
-
-
-
-
-
-
-
-
-
-// // settings for API call
-// function getPlantData(e) {
-//   e.preventDefault()
-// }
-// listOfPlants = ["fern", "palm", "aloe vera"]
-
-
-// //api call
-// const settings = {
-// 	"async": true,
-// 	"crossDomain": true,
-// 	"url": "https://house-plants2.p.rapidapi.com/id/53417c12-4824-5995-bce0-b81984ebbd1d",
-// 	"method": "GET",
-// 	"headers": {
-// 		"X-RapidAPI-Key": "f19bef1971msh26d3d47e75ae9b0p129198jsn8f8e2369c658",
-// 		"X-RapidAPI-Host": "house-plants2.p.rapidapi.com"
-// 	}
-// };
-// $.ajax(settings).done(function (response) {
-//     console.log(response);
-//     var CardDeck = document.getElementById(".card-deck");
-//     var Card = $("<div>");
-//     var Img = $("<img>");
-//     CardBody = $("<div>");
-//     CardTitle = $("<h5>");
-//     CardTitle.text(listOfPlants[i])
-//     CardDeck.append(Card);
-//     Card.append(Img, CardBody);
-
-
-
-
-
-
-//     document.getElementById("card-title").textContent = response["Common name"]
-
-//   })
-//     .catch(err => console.error(err));
-
-
-// // initial API call - Adam
-
+const string = JSON.stringify(options);
 
 
 
