@@ -1,134 +1,295 @@
 
-
 var output;
-var outputArray = {};
 
-var myPlants = ["Fern", "Palm", "grass", "flower"];
+var myPlants = ["Rhapis excelsa", "Janet Craig"];
+var myPlantsNoSpaces = [];
+var outputArray = [];
+var allPlantData = []
+var searchPlantData;
 
 //HTML ELEMENTS FOR JQUERY
 var viewing = $("#viewing-pane");
-var searchString = $("#query");
+// var userInput = $("#query");
 var searchButton = $("#searchbutton");
 
-// search bar
-var userInput = document.querySelector("#query");
-var button = document.querySelector("#searchbutton");
-button.addEventListener("click", addPlant);
-
-// const string = JSON.stringify(options);
-
-
-function addPlant(input) {
-	myPlants.push(input)
-};
 
 
 
 
+// P A G E   S E T U P
+
+// styling
+function styling() {
+	cardDiv.css({
+		"display": "flex",
+		"flex-direction": "column",
+		"flex": "1 1 100px",
+		"align-items": "center",
+		"justify-content": "center",
+		"min-height": "30vh",
+		"background-color": "#333",
+		"border-radius": "3rem",
+		"color": "violet",
+		"margin": "0.5rem",
+		"padding": "0.75rem",
+		"box-shadow": "10px 10px 20px rgba(0, 0, 0, 0.7)"
+	});
+	cardSection.css({
+		"display": "flex",
+		"background-color": "purple",
+		"margin": "1rem",
+		"padding": "1rem",
+		"flex-direction": "horizontal",
+	});
+}
 
 
 
-//api call
-const settings = {
-	"async": true,
-	"crossDomain": true,
-	"url": "https://house-plants2.p.rapidapi.com/all-lite",
-	"method": "GET",
-	"headers": {
-		"X-RapidAPI-Key": "f19bef1971msh26d3d47e75ae9b0p129198jsn8f8e2369c658",
-		"X-RapidAPI-Host": "house-plants2.p.rapidapi.com"
-	}
-};
-
-$.ajax(settings).then(function (response) {
-	console.log(response);
-	output = {
-		name: response[0]['Latin name'],
-		imageURL: response[0]['Img'],
-		origin: response[0]['Origin'][0]
-	};
-
-	for (var i = 0; i < myPlants.length; i++) {
-		currentPlant = myPlants[i];
-		console.log(currentPlant);
-		outputArray[i] = {
-			name: response[i]['Latin name'],
-			imageURL: response[i]['Img'],
-			origin: response[i]['Origin'][0]
-		};
-		console.log(outputArray[i]);
-	};
-
-	dashboard(outputArray);
-});
-
-
-
-
-
-
-// display the plants as cards
-function dashboard(dataArray) {
+// base layout
+function buildCardSection() {
 	viewing.empty();
-
 	var dashboard = $("<div>");
 	var title = $("<h2>").text("My Plants:");
 	dashboard.append(title);
-
 	var cardSection = $("<div>");
-	console.log(dataArray)
+
+	dashboard.append(cardSection);
+	viewing.append(dashboard);
+	return cardSection;
+};
+
+
+
+
+
+// rendering existing plants
+
+//api call for existing plants
+async function getMyPlantsData(myPlants) {
+	//itterate through myPlants - will eventually come from local storage
 	for (var i = 0; i < myPlants.length; i++) {
-		console.log(dataArray[i])
-		var cardDiv = $("<div>");
-		var plantTitle = $("<h3>").text(dataArray[i].name);
-		var plantIMG = $("<img>").attr("src", dataArray[i].imageURL);
-
-		var plantInfo = $("<div>");
-		var plantOrigin = $("<h4>").text(`origin: ${dataArray[i].origin}`);
-
-		plantInfo.append(plantOrigin);
-
-
-		cardDiv.append(plantTitle);
-		cardDiv.append(plantIMG);
-		cardDiv.append(plantInfo);
-
-
-		cardSection.append(cardDiv);
+		let plant = myPlants[i];
+		outputArray.push(await apiCall(plant));
+		console.log(outputArray);
+	};
+	return outputArray;
+};
 
 
 
-		dashboard.append(cardSection);
-		viewing.append(dashboard);
 
-		cardDiv.css({
-			"display": "flex",
-			"flex-direction": "column",
-			"flex": "1 1 100px",
-			"align-items": "center",
-			"justify-content": "center",
-			"min-height": "30vh",
-			"background-color": "#333",
-			"border-radius": "3rem",
-			"color": "violet",
-			"margin": "0.5rem",
-			"padding": "0.75rem",
-			"box-shadow": "10px 10px 20px rgba(0, 0, 0, 0.7)"
+	async function apiCall(plant) {
+		//will become function so ajax api call only shown once
+		plantQuery = plant.replace(/ /g, '%20');
+		console.log(plantQuery);
+		const settings = {
+			"async": true,
+			"crossDomain": true,
+			"url": `https://house-plants2.p.rapidapi.com/search?query=${plantQuery}`,
+			"method": "GET",
+			"headers": {
+				"X-RapidAPI-Key": "48a7f35cbbmsh1b5e31dc2bd27b6p1f4b21jsn3f4de91390bd",
+				//old api key f19bef1971msh26d3d47e75ae9b0p129198jsn8f8e2369c658
+				"X-RapidAPI-Host": "house-plants2.p.rapidapi.com"
+			}
+		}
+
+		//testing to make sure url string is correct
+		// console.log(settings.url)
+
+		return $.ajax(settings).then(function (response) {
+			console.log(response);
+			outputArray = {
+				name: response[0]['item']['Common name'][0],
+				latinName: response[0]['item']['Latin name'],
+				water: response[0]['item']['Watering'],
+				maxTemp: response[0]['item']['Temperature max']['C'],
+				minTemp: response[0]['item']['Temperature min']['C'],
+				origin: response[0]['item']['Origin'][0],
+				imageURL: response[0]['item']['Url'],
+			};
+			return outputArray;
+			// console.log(outputArray[i])
 		});
-
-		cardSection.css({
-			"display": "flex",
-			"background-color": "purple",
-			"margin": "1rem",
-			"padding": "1rem",
-			"flex-direction": "horizontal",
-
-		})
+	};
 
 
-	}
 
+
+
+
+
+
+
+// function renderMyPlants(AllPlantData, cardSection) {
+// 	for (var i = 0; i < AllPlantData.length; i++) {
+// 		console.log(`entry ${i}:`);
+// 		cardSection = addPlantCard(AllPlantData[i], cardSection);
+// 	}
+
+// }
+
+// // rendering the cards
+// function addPlantCard(dataArray, cardSection) {
+// 	var cardDiv = $("<div>");
+// 	var plantTitle = $("<h3>").text(dataArray.name);
+// 	var plantIMG = $("<img>").attr("src", dataArray.imageURL);
+// 	var plantInfo = $("<div>");
+// 	var latinName = $("<h4>").text(dataArray.latinName);
+// 	var water = $("<h4>").text(dataArray.water);
+// 	var plantOrigin = $("<h4>").text(`origin: ${dataArray.origin}`);
+
+// 	//add text to info box
+// 	plantInfo.append(latinName);
+// 	plantInfo.append(water);
+// 	plantInfo.append(plantOrigin);
+
+// 	//assemble card
+// 	cardDiv.append(plantTitle);
+// 	cardDiv.append(plantIMG);
+// 	cardDiv.append(plantInfo);
+
+// 	//add card to the card deck
+// 	cardSection.append(cardDiv);
+// 	return cardSection;
+
+// 	debugger;
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// // A D D I N G   N E W   P L A N T S
+
+// // called when user clicks search
+// function addPlant() {
+// 	var userInput = $("#query").val();
+// 	console.log(userInput);
+
+// 	myPlants.push(userInput);
+// 	plantQuery = userInput.replace(/ /g, '%20');
+// 	myPlantsNoSpaces.push(plantQuery);
+// 	console.log(myPlantsNoSpaces);
+// 	//then makes api call with searched plant
+// 	debugger;
+// 	findPlantData(plantQuery);
+
+
+// };
+
+
+async function buildApp() {
+	cardSection = await buildCardSection();
+	allPlantData = await getMyPlantsData(myPlants);
+	console.log(allPlantData);
+	// renderMyPlants(allPlantData, cardSection);
+	// styling();
 }
+
+
+
+
+
+//MAIN CODE - waits until page has finished loading before running the following:
+$(document).ready(function () {
+	buildApp();
+	// searchButton.on("click", addPlant);
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+// // display the plants as cards
+// function dashboard(dataArray) {
+// 	viewing.empty();
+
+// 	var dashboard = $("<div>");
+// 	var title = $("<h2>").text("My Plants:");
+// 	dashboard.append(title);
+
+// 	var cardSection = $("<div>");
+// 	console.log(dataArray)
+// 	for (var i = 0; i < myPlants.length; i++) {
+// 		console.log(dataArray[i])
+// 		var cardDiv = $("<div>");
+// 		var plantTitle = $("<h3>").text(dataArray[i].name);
+// 		var plantIMG = $("<img>").attr("src", dataArray[i].imageURL);
+
+// 		var plantInfo = $("<div>");
+// 		var plantOrigin = $("<h4>").text(`origin: ${dataArray[i].origin}`);
+
+// 		plantInfo.append(plantOrigin);
+
+
+// 		cardDiv.append(plantTitle);
+// 		cardDiv.append(plantIMG);
+// 		cardDiv.append(plantInfo);
+
+
+// 		cardSection.append(cardDiv);
+
+
+
+// 		dashboard.append(cardSection);
+// 		viewing.append(dashboard);
+
+// 		cardDiv.css({
+// 			"display": "flex",
+// 			"flex-direction": "column",
+// 			"flex": "1 1 100px",
+// 			"align-items": "center",
+// 			"justify-content": "center",
+// 			"min-height": "30vh",
+// 			"background-color": "#333",
+// 			"border-radius": "3rem",
+// 			"color": "violet",
+// 			"margin": "0.5rem",
+// 			"padding": "0.75rem",
+// 			"box-shadow": "10px 10px 20px rgba(0, 0, 0, 0.7)"
+// 		});
+
+// 		cardSection.css({
+// 			"display": "flex",
+// 			"background-color": "purple",
+// 			"margin": "1rem",
+// 			"padding": "1rem",
+// 			"flex-direction": "horizontal",
+
+// 		})
+
+
+// 	}
+
+// }
 
 
 
