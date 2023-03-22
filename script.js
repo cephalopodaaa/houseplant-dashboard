@@ -1,6 +1,4 @@
-// The below code fills in the first row of the table
-var category = "Fern";
-var queryURL = "https://house-plants2.p.rapidapi.com/category/" + category + "&apikey=48a7f35cbbmsh1b5e31dc2bd27b6p1f4b21jsn3f4de91390bd";
+
 
 var output;
 var outputArray = {};
@@ -9,8 +7,28 @@ var myPlants = ["Fern", "Palm", "grass", "flower"];
 
 //HTML ELEMENTS FOR JQUERY
 var viewing = $("#viewing-pane");
+var searchString = $("#query");
+var searchButton = $("#searchbutton");
+
+// search bar
+var userInput = document.querySelector("#query");
+var button = document.querySelector("#searchbutton");
+button.addEventListener("click", addPlant);
+
+// const string = JSON.stringify(options);
 
 
+function addPlant(input) {
+	myPlants.push(input)
+};
+
+
+
+
+
+
+
+//api call
 const settings = {
 	"async": true,
 	"crossDomain": true,
@@ -21,6 +39,7 @@ const settings = {
 		"X-RapidAPI-Host": "house-plants2.p.rapidapi.com"
 	}
 };
+
 $.ajax(settings).then(function (response) {
 	console.log(response);
 	output = {
@@ -30,12 +49,15 @@ $.ajax(settings).then(function (response) {
 	};
 
 	for (var i = 0; i < myPlants.length; i++) {
+		currentPlant = myPlants[i];
+		console.log(currentPlant);
 		outputArray[i] = {
 			name: response[i]['Latin name'],
 			imageURL: response[i]['Img'],
 			origin: response[i]['Origin'][0]
-		}
-	}
+		};
+		console.log(outputArray[i]);
+	};
 
 	dashboard(outputArray);
 });
@@ -43,6 +65,9 @@ $.ajax(settings).then(function (response) {
 
 
 
+
+
+// display the plants as cards
 function dashboard(dataArray) {
 	viewing.empty();
 
@@ -104,14 +129,6 @@ function dashboard(dataArray) {
 	}
 
 }
-
-
-// search bar
-var userInput = document.querySelector("#query") ;
-var button = document.querySelector("#searchbutton");
-button.addEventListener("click", getPlantData);
-
-const string = JSON.stringify(options);
 
 
 
