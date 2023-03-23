@@ -3,9 +3,11 @@ var output;
 
 var myPlants = ["Rhapis excelsa", "Janet Craig"];
 var myPlantsNoSpaces = [];
-var outputArray = [];
+// var outputArray = [];
 var allPlantData = []
 var searchPlantData;
+
+var cardSection;
 
 //HTML ELEMENTS FOR JQUERY
 var viewing = $("#viewing-pane");
@@ -19,29 +21,29 @@ var searchButton = $("#searchbutton");
 // P A G E   S E T U P
 
 // styling
-function styling() {
-	cardDiv.css({
-		"display": "flex",
-		"flex-direction": "column",
-		"flex": "1 1 100px",
-		"align-items": "center",
-		"justify-content": "center",
-		"min-height": "30vh",
-		"background-color": "#333",
-		"border-radius": "3rem",
-		"color": "violet",
-		"margin": "0.5rem",
-		"padding": "0.75rem",
-		"box-shadow": "10px 10px 20px rgba(0, 0, 0, 0.7)"
-	});
-	cardSection.css({
-		"display": "flex",
-		"background-color": "purple",
-		"margin": "1rem",
-		"padding": "1rem",
-		"flex-direction": "horizontal",
-	});
-}
+// function styling() {
+// 	cardDiv.css({
+// 		"display": "flex",
+// 		"flex-direction": "column",
+// 		"flex": "1 1 100px",
+// 		"align-items": "center",
+// 		"justify-content": "center",
+// 		"min-height": "30vh",
+// 		"background-color": "#333",
+// 		"border-radius": "3rem",
+// 		"color": "violet",
+// 		"margin": "0.5rem",
+// 		"padding": "0.75rem",
+// 		"box-shadow": "10px 10px 20px rgba(0, 0, 0, 0.7)"
+// 	});
+// 	cardSection.css({
+// 		"display": "flex",
+// 		"background-color": "purple",
+// 		"margin": "1rem",
+// 		"padding": "1rem",
+// 		"flex-direction": "horizontal",
+// 	});
+// }
 
 
 
@@ -65,20 +67,19 @@ function buildCardSection() {
 // rendering existing plants
 
 //api call for existing plants
-async function getMyPlantsData(myPlants) {
-	//itterate through myPlants - will eventually come from local storage
-	for (var i = 0; i < myPlants.length; i++) {
-		let plant = myPlants[i];
-		outputArray.push(await apiCall(plant));
-		console.log(outputArray);
+async function getMyPlantsData(myPlants, allPlantData) {
+	//itterate through myPlants - will eventually come from local storage;
+	const promises = myPlants.map((plant) => apiCall(plant));
+	console.log(promises);
+	const plantData = await Promise.all(promises);
+	await console.log(plantData);
+	return plantData;
 	};
-	return outputArray;
-};
 
 
 
 
-	async function apiCall(plant) {
+	function apiCall(plant) {
 		//will become function so ajax api call only shown once
 		plantQuery = plant.replace(/ /g, '%20');
 		console.log(plantQuery);
@@ -99,7 +100,7 @@ async function getMyPlantsData(myPlants) {
 
 		return $.ajax(settings).then(function (response) {
 			console.log(response);
-			outputArray = {
+			output = {
 				name: response[0]['item']['Common name'][0],
 				latinName: response[0]['item']['Latin name'],
 				water: response[0]['item']['Watering'],
@@ -108,8 +109,7 @@ async function getMyPlantsData(myPlants) {
 				origin: response[0]['item']['Origin'][0],
 				imageURL: response[0]['item']['Url'],
 			};
-			return outputArray;
-			// console.log(outputArray[i])
+			return output;
 		});
 	};
 
@@ -121,40 +121,40 @@ async function getMyPlantsData(myPlants) {
 
 
 
-// function renderMyPlants(AllPlantData, cardSection) {
-// 	for (var i = 0; i < AllPlantData.length; i++) {
-// 		console.log(`entry ${i}:`);
-// 		cardSection = addPlantCard(AllPlantData[i], cardSection);
-// 	}
+function renderMyPlants(AllPlantData, cardSection) {
+	for (var i = 0; i < AllPlantData.length; i++) {
+		console.log(`entry ${i}:`);
+		cardSection = addPlantCard(AllPlantData[i], cardSection);
+	}
 
-// }
+}
 
-// // rendering the cards
-// function addPlantCard(dataArray, cardSection) {
-// 	var cardDiv = $("<div>");
-// 	var plantTitle = $("<h3>").text(dataArray.name);
-// 	var plantIMG = $("<img>").attr("src", dataArray.imageURL);
-// 	var plantInfo = $("<div>");
-// 	var latinName = $("<h4>").text(dataArray.latinName);
-// 	var water = $("<h4>").text(dataArray.water);
-// 	var plantOrigin = $("<h4>").text(`origin: ${dataArray.origin}`);
+// rendering the cards
+function addPlantCard(dataArray, cardSection) {
+	var cardDiv = $("<div>");
+	var plantTitle = $("<h3>").text(dataArray.name);
+	var plantIMG = $("<img>").attr("src", dataArray.imageURL);
+	var plantInfo = $("<div>");
+	var latinName = $("<h4>").text(dataArray.latinName);
+	var water = $("<h4>").text(dataArray.water);
+	var plantOrigin = $("<h4>").text(`origin: ${dataArray.origin}`);
 
-// 	//add text to info box
-// 	plantInfo.append(latinName);
-// 	plantInfo.append(water);
-// 	plantInfo.append(plantOrigin);
+	//add text to info box
+	plantInfo.append(latinName);
+	plantInfo.append(water);
+	plantInfo.append(plantOrigin);
 
-// 	//assemble card
-// 	cardDiv.append(plantTitle);
-// 	cardDiv.append(plantIMG);
-// 	cardDiv.append(plantInfo);
+	//assemble card
+	cardDiv.append(plantTitle);
+	cardDiv.append(plantIMG);
+	cardDiv.append(plantInfo);
 
-// 	//add card to the card deck
-// 	cardSection.append(cardDiv);
-// 	return cardSection;
+	//add card to the card deck
+	cardSection.append(cardDiv);
+	return cardSection;
 
-// 	debugger;
-// }
+	debugger;
+}
 
 
 
@@ -201,8 +201,7 @@ async function getMyPlantsData(myPlants) {
 async function buildApp() {
 	cardSection = await buildCardSection();
 	allPlantData = await getMyPlantsData(myPlants);
-	console.log(allPlantData);
-	// renderMyPlants(allPlantData, cardSection);
+	renderMyPlants(allPlantData, cardSection);
 	// styling();
 }
 
